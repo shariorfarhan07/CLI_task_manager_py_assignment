@@ -1,6 +1,8 @@
 import argparse
-from task_manager import TaskManager
+
+from Utils.enums import Command
 from storage import Storage
+from task_manager import TaskManager
 
 
 def main():
@@ -32,15 +34,15 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "add":
+    if args.command == Command.ADD:
         task = manager.add_task(args.title, args.description)
         print(f"Task '{task.title}' added successfully.")
-    elif args.command == "complete":
+    elif args.command == Command.COMPLETE:
         if manager.complete_task(args.title):
             print(f"Task '{args.title}' marked as completed.")
         else:
             print(f"Task '{args.title}' not found.")
-    elif args.command == "list":
+    elif args.command == Command.LIST:
         tasks = manager.list_tasks(include_completed=args.all)
         if tasks:
             for task in tasks:
@@ -48,7 +50,7 @@ def main():
                 print(f"{task.title} - {status}")
         else:
             print("No tasks found.")
-    elif args.command == "report":
+    elif args.command == Command.REPORT:
         print(manager.generate_report())
     else:
         parser.print_help()
