@@ -34,14 +34,26 @@ def main():
 
     args = parser.parse_args()
 
+    print(args,"farhan",args.command,Command.ADD,args.command==Command.ADD)
     if args.command == Command.ADD:
+        print("farhan farhan farhan")
         task = manager.add_task(args.title, args.description)
-        print(f"Task '{task.title}' added successfully.")
+        print(task)
+        if task:
+            print(f"Task '{task.title}' added successfully.")
+        else:
+            print(f"We have a task with the title of '{args.title}'."
+              f"Please change the title if you want to add a different task")
+
+
+
     elif args.command == Command.COMPLETE:
         if manager.complete_task(args.title):
             print(f"Task '{args.title}' marked as completed.")
         else:
             print(f"Task '{args.title}' not found.")
+
+
     elif args.command == Command.LIST:
         tasks = manager.list_tasks(include_completed=args.all)
         if tasks:
@@ -50,6 +62,8 @@ def main():
                 print(f"{task.title} - {status}")
         else:
             print("No tasks found.")
+
+
     elif args.command == Command.REPORT:
         print(manager.generate_report())
     else:

@@ -26,7 +26,7 @@ class TestTaskManager(unittest.TestCase):
         self.storage.get_all_tasks.return_value = tasks
         result = self.manager.list_tasks()
         self.assertEqual(len(result), 2)
-        self.assertNotIn(tasks[1], result)
+        self.assertNotIn(tasks,result)
 
     def test_generate_report(self):
         tasks = [

@@ -1,12 +1,14 @@
 from datetime import datetime
+from models.task import Task
 
 
-class Task:
+class TaskDto:
 
     def __init__(self, title, description):
         self.title = title
         self.description = description
         self.completed = False
+        self.time_to_complete = 0
         self.created_at = datetime.now().isoformat()
 
 
@@ -16,9 +18,11 @@ class TaskManager:
         self.storage = storage
 
     def add_task(self, title, description):
-        task = Task(title, description)
-        self.storage.save_task(task)
-        return task
+        task = Task(title=title, description=description)
+        print(task,"task manager")
+        return self.storage.save_task(task)
+
+
 
     def complete_task(self, title):
         task = self.storage.get_task(title)
@@ -29,8 +33,16 @@ class TaskManager:
         return False
 
     def list_tasks(self, include_completed=False):
+        if include_completed:
+            return self.storage.get_all_tasks()
+
+        incomplete_task=[]
         tasks = self.storage.get_all_tasks()
-        return tasks
+        for task in tasks:
+            if not task.completed:
+                incomplete_task.append(task)
+
+        return incomplete_task
 
     def generate_report(self):
         tasks = self.storage.get_all_tasks()

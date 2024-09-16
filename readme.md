@@ -13,7 +13,7 @@ The application should allow users to do the following:
    - Total number of tasks
    - Number of completed tasks
    - Number of pending tasks
-   - Average time taken to complete a task
+   - Average time taken to complete a task (*business for this is not clear*)
 5. The application must persist user data across sessions, ensuring that all information remains intact and accessible upon returning, without resetting or losing any previously entered tasks
 
 ## Setup
@@ -54,3 +54,22 @@ Once you are done, please:
 2. Reply to our email with the repository link to complete your submission within the deadline
 
 Good luck!
+
+# my plan
+## Add task
+-[X] Since task title is the unique identifier for the cli application.
+  - [X] we can keep title unique in the database(lets go this path assuming it's a cli for personal use).
+    - [ ] we can do it in database level making the title column unique.
+    - [X] we can do an extra query to check if the task exist in the database. 
+  - [ ] Or we can keep consider this as a daily tasker and if the previously entered task is completed we will let user input task with same title.
+    - if we consider this path:
+      - The title column should not be marked as unique.
+      - An additional query will be required to check if an incomplete task with the same title already exists in the database.
+        - If no such task exists, add the new task.
+        - If an incomplete task is found, notify the user.
+-[ ] need database table to persist.
+
+## What's missing 
+- [ ] there no way to start and end task. need a command for that.
+- [ ] if user start a task current date will be inserted in start_time field
+- [ ] if user end a task current date will be inserted in end_time field
