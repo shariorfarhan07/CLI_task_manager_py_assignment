@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from Utils.enums import Status
 from models.task import Task
 
+# create a entity got it
 class TaskDto:
-
     def __init__(self, title, description):
         self.title = title
         self.description = description
@@ -30,7 +30,7 @@ class TaskManager:
 
     def complete_task(self, title):
         task = self.storage.get_task(title)
-        if task ==None:
+        if task ==None or task.end_time is not None:
             return False
         if task.start_time == None:
             return Status.NOT_STARTED
@@ -67,11 +67,8 @@ class TaskManager:
         completed_tasks = len([task for task in tasks if task.completed])
         total_completed_task_time = [(task.end_time-task.start_time).total_seconds() for task in tasks
                                      if task.completed and (task.end_time != None or task.start_time !=None )]
-        # if not total_completed_task_time:
-        #     total_completed_task_time= []
 
         average_duration_seconds = sum(total_completed_task_time)/completed_tasks
-        # Convert average duration back to timedelta
         average_duration = timedelta(seconds=average_duration_seconds)
         days = average_duration.days
         seconds = average_duration.seconds

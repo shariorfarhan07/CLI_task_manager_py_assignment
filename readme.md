@@ -57,7 +57,7 @@ Good luck!
 
 # my plan
 ## Add task
--[X] Since task title is the unique identifier for the cli application.
+- [X] Since task title is the unique identifier for the cli application.
   - [X] we can keep title unique in the database(lets go this path assuming it's a cli for personal use).
     - [ ] we can do it in database level making the title column unique.
     - [X] we can do an extra query to check if the task exist in the database. 
@@ -67,9 +67,9 @@ Good luck!
       - An additional query will be required to check if an incomplete task with the same title already exists in the database.
         - If no such task exists, add the new task.
         - If an incomplete task is found, notify the user.
--[ ] need database table to persist.
+- [ ] need database table to persist.
 
 ## What's missing 
-- [ ] there no way to start and end task. need a command for that.
-- [ ] if user start a task current date will be inserted in start_time field
-- [ ] if user end a task current date will be inserted in end_time field
+- [X] there no way to start need a command for that.
+- [X] if user start a task current date will be inserted in start_time field
+- [X] if user end a task current date will be inserted in end_time field

@@ -42,5 +42,6 @@ class Storage:
     def get_all_incomplete_task(self):
         return self.session.query(Task).filter(Task.end_time == None).all()
 
+    # Unused method
     def clear_all_tasks(self):
         self.tasks = []
