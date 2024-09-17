@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from sqlalchemy import create_engine
 
-from models.task import Base,Task
+from models.task import Base, Task
 from sqlalchemy.orm import sessionmaker
-class Storage:
 
+
+class Storage:
     DATABASE_URL = "sqlite:///tasks.db"
 
     def __init__(self):
@@ -13,33 +16,31 @@ class Storage:
         self.session = self.Session()
 
     def save_task(self, new_task):
-        existing_task=self.session.query(Task).filter(Task.title == new_task.title).first()
+        existing_task = self.session.query(Task).filter(Task.title == new_task.title).first()
         if existing_task is None:
             self.session.add(new_task)
             self.session.commit()
             return new_task
         return None
 
-
-
-
         # self.session.close()
 
-
-    def update_task(self, updated_task):
-        for i, task in enumerate(self.tasks):
-            if task.title == updated_task.title:
-                self.tasks[i] = updated_task
-                break
+    def commit_updated_task(self, updated_task):
+        self.session.commit()
 
     def get_task(self, title):
-        for task in self.tasks:
-            if task.title == title:
-                return task
-        return None
+        return self.session.query(Task).filter(Task.title == str(title)).first()
+
+    def start_task(self, title):
+        task = self.session.query(Task).filter(Task.title == str(title)).first()
+        task.start_time = datetime.utcnow()
+        self.session.commit()
 
     def get_all_tasks(self):
-        return list(self.tasks)
+        return self.session.query(Task).all()
+
+    def get_all_incomplete_task(self):
+        return self.session.query(Task).filter(Task.end_time == None).all()
 
     def clear_all_tasks(self):
         self.tasks = []

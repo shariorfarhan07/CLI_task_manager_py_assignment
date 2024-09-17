@@ -10,6 +10,8 @@ class TestTaskManager(unittest.TestCase):
         self.storage = MagicMock()
         self.manager = TaskManager(self.storage)
 
+
+
     def test_add_task(self):
         task = self.manager.add_task("Test Task", "Description")
         self.storage.save_task.assert_called_once()
@@ -35,6 +37,7 @@ class TestTaskManager(unittest.TestCase):
             Task("Task 3", "Description 3")
         ]
         tasks[0].completed = True
+        tasks[1].completed = True
         self.storage.get_all_tasks.return_value = tasks
         report = self.manager.generate_report()
         self.assertEqual(report["total"], 3)

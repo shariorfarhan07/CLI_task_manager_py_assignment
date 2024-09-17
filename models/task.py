@@ -13,7 +13,14 @@ class Task(Base):
     description = Column(Text, nullable=True)
     completed = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    start_time = Column(DateTime, default=datetime.utcnow, nullable=True)
-    end_time = Column(DateTime, default=datetime.utcnow, nullable=True)
+    start_time = Column(DateTime, nullable=True)
+    end_time = Column(DateTime, default=None, nullable=True)
+
+    def __init__(self, title, description, completed=False, start_time=None, end_time=None):
+        self.title = title
+        self.description = description
+        self.completed = completed
+        self.start_time = start_time
+        self.end_time = end_time
     def __repr__(self):
        return f"<Task(id={self.id}, title={self.title}, completed={self.completed}, created_at={self.created_at})>"
