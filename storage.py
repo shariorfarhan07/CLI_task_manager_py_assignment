@@ -1,47 +1,67 @@
-from datetime import datetime
+import json
 
-from sqlalchemy import create_engine
-
-from models.task import Base, Task
-from sqlalchemy.orm import sessionmaker
+from task_manager import Task
 
 
 class Storage:
-    DATABASE_URL = "sqlite:///tasks.db"
+
 
     def __init__(self):
-        self.engine = create_engine(self.DATABASE_URL, echo=True)
-        Base.metadata.create_all(self.engine)
-        self.Session = sessionmaker(bind=self.engine)
-        self.session = self.Session()
+        self._tasks =Storage.read_json('db.json')
+        print(self._tasks)
 
-    def save_task(self, new_task):
-        existing_task = self.session.query(Task).filter(Task.title == new_task.title).first()
-        if existing_task is None:
-            self.session.add(new_task)
-            self.session.commit()
-            return new_task
-        return None
 
-        # self.session.close()
+    def save_task(self, task):
+        self._tasks.append(task.__dict__)
+        self.write_json(self._tasks)
 
-    def commit_updated_task(self, updated_task):
-        self.session.commit()
+    def update_task(self, updated_task):
+        for i, task in enumerate(self._tasks):
+            if task.title == updated_task.title:
+                self._tasks[i] = updated_task
+                break
+        self.write_json(self._tasks)
+
 
     def get_task(self, title):
-        return self.session.query(Task).filter(Task.title == str(title)).first()
-
-    def start_task(self, title):
-        task = self.session.query(Task).filter(Task.title == str(title)).first()
-        task.start_time = datetime.utcnow()
-        self.session.commit()
+        for task in self._tasks:
+            if task.title == title:
+                return task
+        return None
 
     def get_all_tasks(self):
-        return self.session.query(Task).all()
+        return list(self._tasks)
 
-    def get_all_incomplete_task(self):
-        return self.session.query(Task).filter(Task.end_time == None).all()
 
-    # Unused method
     def clear_all_tasks(self):
-        self.tasks = []
+        self._tasks = []
+        self.write_json()
+
+    # methods to persist in the database
+    @classmethod
+    def read_json(cls,filename='db.json'):
+
+        try:
+            with open(filename, 'r') as f:
+                temp = cls.json_to_tasks(f.readline())
+                return temp
+        except FileNotFoundError:
+            create_file = open(filename, 'w')
+            create_file.write('[]')
+            create_file.close()
+            return []
+
+    @classmethod
+    def write_json(cls,data, filename='db.json'):
+        print(data,'write')
+        with open(filename, 'w') as f:
+            json.dump(cls.tasks_to_json(data), f, indent=4)
+
+    def tasks_to_json(tasks):
+        return json.dumps([task.to_dict() for task in tasks], indent=4)
+
+    def json_to_tasks(json_data):
+        print(json_data,'json to task')
+        tasks_dict = json.loads(json_data)
+        return [Task.from_dict(task_data) for task_data in tasks_dict]
+
