@@ -7,12 +7,10 @@ class Storage:
 
     def __init__(self):
         self._tasks = Storage.read_json('db.json')
-        print(self._tasks)
 
     def save_task(self, task):
         for item in self._tasks:
             if task.title == item.title:
-                print("Can not create a task with same title")
                 return None
         self._tasks.append(task)
         self.write_json(self._tasks)
@@ -53,7 +51,6 @@ class Storage:
             return []
 
     def write_json(cls, data, filename='db.json'):
-        print(data, 'write')
         with open(filename, 'w') as f:
             temp = cls.instance_array_to_dic_array(data)
             json.dump(temp, f)
@@ -64,7 +61,6 @@ class Storage:
 
     @classmethod
     def json_to_task_list(cls, json_data):
-        print(json_data, "task")
         if len(json_data) == 0:
             return []
         tasks_dict = json.loads(json_data)

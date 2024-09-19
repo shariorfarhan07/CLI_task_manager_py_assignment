@@ -20,7 +20,7 @@ def main():
 
     # Start task
     start_parser = subparsers.add_parser("start",
-                                            help="start a task")
+                                         help="start a task")
     start_parser.add_argument("title", help="Task title")
 
     # Complete task
@@ -50,13 +50,8 @@ def main():
 
 
     elif args.command == Command.COMPLETE:
-        status=manager.complete_task(args.title)
-        if status == Status.COMPLETE:
-            print(f"Task '{args.title}' marked as completed.")
-        elif status == Status.NOT_FOUND:
-            print(f"Task '{args.title}' not found.")
-        else:
-            print(f"Task '{args.title}' not started yet")
+        manager.complete_task(args.title)
+
 
 
     elif args.command == Command.LIST:

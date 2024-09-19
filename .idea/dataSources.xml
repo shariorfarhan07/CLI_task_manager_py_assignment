@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="tasks" uuid="cb8e7991-a88b-4c23-8fdf-22486c2915ca">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>ec1acbb5-d3fc-4534-b3e6-581a3ed68c11</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\Farhan\Videos\new\fastApi\enosis\optimizely\se1-assignment\py_assignment\tasks.db</jdbc-url>
