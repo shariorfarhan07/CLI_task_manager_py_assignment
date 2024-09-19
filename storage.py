@@ -5,14 +5,16 @@ from task_manager import Task
 
 class Storage:
 
-
     def __init__(self):
-        self._tasks =Storage.read_json('db.json')
+        self._tasks = Storage.read_json('db.json')
         print(self._tasks)
 
-
     def save_task(self, task):
-        self._tasks.append(task.__dict__)
+        for item in self._tasks:
+            if task.title == item.title:
+                print("Can not create a task with same title")
+                return None
+        self._tasks.append(task)
         self.write_json(self._tasks)
 
     def update_task(self, updated_task):
@@ -22,7 +24,6 @@ class Storage:
                 break
         self.write_json(self._tasks)
 
-
     def get_task(self, title):
         for task in self._tasks:
             if task.title == title:
@@ -30,8 +31,7 @@ class Storage:
         return None
 
     def get_all_tasks(self):
-        return list(self._tasks)
-
+        return self._tasks
 
     def clear_all_tasks(self):
         self._tasks = []
@@ -39,11 +39,12 @@ class Storage:
 
     # methods to persist in the database
     @classmethod
-    def read_json(cls,filename='db.json'):
+    def read_json(cls, filename='db.json', json=None):
 
         try:
             with open(filename, 'r') as f:
-                temp = cls.json_to_tasks(f.readline())
+                json_str = f.readline()
+                temp = cls.json_to_task_list(json_str)
                 return temp
         except FileNotFoundError:
             create_file = open(filename, 'w')
@@ -51,17 +52,23 @@ class Storage:
             create_file.close()
             return []
 
-    @classmethod
-    def write_json(cls,data, filename='db.json'):
-        print(data,'write')
+    def write_json(cls, data, filename='db.json'):
+        print(data, 'write')
         with open(filename, 'w') as f:
-            json.dump(cls.tasks_to_json(data), f, indent=4)
+            temp = cls.instance_array_to_dic_array(data)
+            json.dump(temp, f)
 
-    def tasks_to_json(tasks):
-        return json.dumps([task.to_dict() for task in tasks], indent=4)
+    def instance_array_to_dic_array(self,tasks):
+        temp = [task.to_dict() for task in tasks]
+        return temp
 
-    def json_to_tasks(json_data):
-        print(json_data,'json to task')
+    @classmethod
+    def json_to_task_list(cls, json_data):
+        print(json_data, "task")
+        if len(json_data) == 0:
+            return []
         tasks_dict = json.loads(json_data)
         return [Task.from_dict(task_data) for task_data in tasks_dict]
 
+    def persist(self):
+        self.write_json(self._tasks)
