@@ -41,7 +41,6 @@ def main():
 
     if args.command == Command.ADD:
         task = manager.add_task(args.title, args.description)
-        print(task)
         if task:
             print(f"Task '{task.title}' added successfully.")
         else:

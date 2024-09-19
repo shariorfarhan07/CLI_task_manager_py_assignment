@@ -55,7 +55,11 @@ Once you are done, please:
 
 Good luck!
 
-# my plan
+# Assumptions
+- As this is a small app for personal task management, I decided not to use a database. Instead, I am persisting the data in a file named `db.json`, as I didn’t want to use a sledgehammer to crack a nut.
+- After reviewing the entire codebase, I opted for a TDD approach, maintaining the same test cases for this version.
+- Since the add command adds tasks with a title and description, the title should be unique.
+There is no command for starting a task, so I suggest introducing a new command called `start`. To generate the report, which requires the average time to complete tasks, I propose adding `start_time` and `end_time` fields. Initially, both will be set to None. When a task is started using its title, the `start_time` will be updated accordingly
 ## Add task
 - [X] Since task title is the unique identifier for the cli application.
   - [X] we can keep title unique in the database(lets go this path assuming it's a cli for personal use).
